@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+
+  "contentVersion": "1.0.0.0",
+
+
+  "parameters": {
+
+
+    "storageAccountName": {
+
+      "value": "chaifuncstorage20260715"
+
+    },
+
+
+    "applicationInsightsName": {
+
+      "value": "chai-function-ai-20260715"
+
+    },
+
+
+    "appServicePlanName": {
+
+      "value": "chai-function-plan-20260715"
+
+    },
+
+
+    "functionAppName": {
+
+      "value": "chai-function-app-20260715"
+
+    },
+
+
+    "logicAppName": {
+
+      "value": "chai-logic-app-20260715"
+
+    },
+
+
+    "location": {
+
+      "value": "Central India"
+
+    }
+
+
+  }
+
+}

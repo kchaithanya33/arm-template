@@ -1,0 +1,258 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+
+  "parameters": {
+
+    "storageAccountName": {
+      "type": "string"
+    },
+
+    "applicationInsightsName": {
+      "type": "string"
+    },
+
+    "appServicePlanName": {
+      "type": "string"
+    },
+
+    "functionAppName": {
+      "type": "string"
+    },
+
+    "logicAppName": {
+      "type": "string"
+    },
+
+    "location": {
+      "type": "string"
+    }
+
+  },
+
+
+  "variables": {
+
+    "storageSku": "Standard_LRS",
+    "storageKind": "StorageV2"
+
+  },
+
+
+  "resources": [
+
+
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+
+      "name": "[parameters('storageAccountName')]",
+
+      "location": "[parameters('location')]",
+
+      "sku": {
+        "name": "[variables('storageSku')]"
+      },
+
+      "kind": "[variables('storageKind')]",
+
+      "properties": {}
+    },
+
+
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+
+      "name": "[parameters('applicationInsightsName')]",
+
+      "location": "[parameters('location')]",
+
+      "kind": "web",
+
+      "properties": {
+        "Application_Type": "web"
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2023-12-01",
+
+      "name": "[parameters('appServicePlanName')]",
+
+      "location": "[parameters('location')]",
+
+      "kind": "functionapp",
+
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic"
+      },
+
+      "properties": {
+        "reserved": true
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2023-12-01",
+
+      "name": "[parameters('functionAppName')]",
+
+      "location": "[parameters('location')]",
+
+      "kind": "functionapp,linux",
+
+
+      "dependsOn": [
+
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+
+        "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]"
+
+      ],
+
+
+      "properties": {
+
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+
+
+        "siteConfig": {
+
+
+          "linuxFxVersion": "Python|3.11",
+
+
+          "appSettings": [
+
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+
+
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "python"
+            },
+
+
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME_VERSION",
+              "value": "3.11"
+            },
+
+
+            {
+              "name": "AzureWebJobsStorage",
+
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';EndpointSuffix=core.windows.net;AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName')),'2023-01-01').keys[0].value)]"
+
+            },
+
+
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+
+              "value": "[reference(resourceId('Microsoft.Insights/components',parameters('applicationInsightsName')),'2020-02-02').InstrumentationKey]"
+
+            }
+
+          ]
+
+        }
+
+      }
+
+    },
+
+
+    {
+      "type": "Microsoft.Logic/workflows",
+
+      "apiVersion": "2019-05-01",
+
+      "name": "[parameters('logicAppName')]",
+
+      "location": "[parameters('location')]",
+
+
+      "properties": {
+
+
+        "state": "Enabled",
+
+
+        "definition": {
+
+
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+
+
+          "contentVersion": "1.0.0.0",
+
+
+          "triggers": {
+
+
+            "manual": {
+
+
+              "type": "Request",
+
+              "kind": "Http",
+
+
+              "inputs": {
+
+                "schema": {}
+
+              }
+
+            }
+
+          },
+
+
+          "actions": {}
+
+        }
+
+      }
+
+    }
+
+
+  ],
+
+
+  "outputs": {
+
+
+    "functionAppName": {
+
+      "type": "string",
+
+      "value": "[parameters('functionAppName')]"
+
+    },
+
+
+    "logicAppName": {
+
+      "type": "string",
+
+      "value": "[parameters('logicAppName')]"
+
+    }
+
+  }
+
+}
