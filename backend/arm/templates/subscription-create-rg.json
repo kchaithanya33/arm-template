@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/subscriptionDeploymentTemplate.json#",
+
+  "contentVersion": "1.0.0.0",
+
+  "parameters": {
+
+    "resourceGroupName": {
+      "type": "string"
+    },
+
+    "resourceGroupLocation": {
+      "type": "string"
+    }
+
+  },
+
+
+  "resources": [
+
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+
+      "apiVersion": "2022-09-01",
+
+      "name": "[parameters('resourceGroupName')]",
+
+      "location": "[parameters('resourceGroupLocation')]"
+    }
+
+  ],
+
+
+  "outputs": {
+
+
+    "resourceGroupName": {
+
+      "type": "string",
+
+      "value": "[parameters('resourceGroupName')]"
+
+    },
+
+
+    "resourceGroupId": {
+
+      "type": "string",
+
+      "value": "[resourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupName'))]"
+
+    },
+
+
+    "resourceGroupLocation": {
+
+      "type": "string",
+
+      "value": "[parameters('resourceGroupLocation')]"
+
+    }
+
+  }
+
+}

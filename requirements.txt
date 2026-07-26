@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+azure-identity
+azure-mgmt-resource
+azure-mgmt-storage
+azure-mgmt-web
+azure-mgmt-monitor
+pymongo

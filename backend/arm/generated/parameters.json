@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageMode": {
+            "value": "existing"
+        },
+        "storageAccountName": {
+            "value": "armstchai002"
+        },
+        "existingStorageResourceId": {
+            "value": ""
+        },
+        "existingStorageConnectionString": {
+            "value": ""
+        },
+        "logicAppMode": {
+            "value": "new"
+        },
+        "logicAppName": {
+            "value": "armstchai002-logic"
+        },
+        "logicAppLocation": {
+            "value": "centralindia"
+        },
+        "workflowType": {
+            "value": "Consumption"
+        },
+        "applicationInsightsMode": {
+            "value": "new"
+        },
+        "applicationInsightsName": {
+            "value": "armstchai002-appinsights"
+        },
+        "applicationInsightsLocation": {
+            "value": "centralindia"
+        },
+        "applicationType": {
+            "value": "web"
+        },
+        "applicationInsightsRetentionInDays": {
+            "value": 90
+        },
+        "workspaceMode": {
+            "value": "new"
+        },
+        "workspaceName": {
+            "value": "armstchai002-law"
+        },
+        "workspaceLocation": {
+            "value": "centralindia"
+        },
+        "workspaceSku": {
+            "value": "PerGB2018"
+        }
+    }
+}

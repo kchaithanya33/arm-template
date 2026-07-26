@@ -1,0 +1,27 @@
+# Azure Authentication
+azure-identity
+
+
+# Resource Groups + Locations
+azure-mgmt-resource
+
+
+# Storage Accounts
+azure-mgmt-storage
+
+
+# Application Insights
+azure-mgmt-applicationinsights
+
+
+# Function App / App Service
+azure-mgmt-web
+
+
+# FastAPI (will use later)
+fastapi
+uvicorn
+
+
+# Environment variables (later)
+python-dotenv
