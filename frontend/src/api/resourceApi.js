@@ -1,6 +1,11 @@
 const API_URL = "http://localhost:8000";
 
 
+// Temporary hardcoded subscription ID
+// Later replace this with login user subscription
+const SUBSCRIPTION_ID = "cc65e704-15de-4ddc-aa64-56973ac617f8";
+
+
 // ----------------------------
 // Resource Group Create
 // ----------------------------
@@ -21,121 +26,129 @@ export async function createResourceGroupApi(data) {
 }
 
 
+
 // ----------------------------
 // Get Resource Groups
 // ----------------------------
-export async function getResourceGroupsApi(subscriptionId) {
+export async function getResourceGroupsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/resource-groups?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/resource-groups?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Locations
 // ----------------------------
-export async function getLocationsApi(subscriptionId) {
+export async function getLocationsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/locations?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/locations?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Storage Accounts
 // ----------------------------
-export async function getStorageAccountsApi(subscriptionId) {
+export async function getStorageAccountsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/storage?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/storage-accounts?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Application Insights
 // ----------------------------
-export async function getApplicationInsightsApi(subscriptionId) {
+export async function getApplicationInsightsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/application-insights?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/application-insights?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Workspaces
 // ----------------------------
-export async function getWorkspacesApi(subscriptionId) {
+export async function getWorkspacesApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/workspaces?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/workspaces?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get App Service Plans
 // ----------------------------
-export async function getAppServicePlansApi(subscriptionId) {
+export async function getAppServicePlansApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/app-service-plans?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/app-service-plans?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Function Apps
 // ----------------------------
-export async function getFunctionAppsApi(subscriptionId) {
+export async function getFunctionAppsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/function-apps?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/function-apps?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }
+
 
 
 // ----------------------------
 // Get Logic Apps
 // ----------------------------
-export async function getLogicAppsApi(subscriptionId) {
+export async function getLogicAppsApi() {
 
   const res = await fetch(
-    `${API_URL}/azure/logic-apps?subscription_id=${subscriptionId}`
+    `${API_URL}/azure/logic-apps?subscription_id=${SUBSCRIPTION_ID}`
   );
 
   const result = await res.json();
 
-  return result.data;
+  return result.data || [];
 }

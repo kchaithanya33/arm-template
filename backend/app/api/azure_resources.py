@@ -2,7 +2,8 @@ from fastapi import APIRouter, HTTPException
 
 from app.services.azure_resource_service import (
     get_resource_groups,
-    get_locations
+    get_locations,
+    get_storage_accounts,
 )
 
 
@@ -47,6 +48,27 @@ def locations(subscription_id: str):
             "status": "success",
             "data": get_locations(subscription_id)
         }
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
+# ======================================================
+# STORAGE ACCOUNTS
+# ======================================================
+
+@router.get("/storage-accounts")
+def storage_accounts(subscription_id: str):
+
+    try:
+
+        return {
+            "status": "success",
+            "data": get_storage_accounts(subscription_id)
+        }
+
 
     except Exception as e:
 

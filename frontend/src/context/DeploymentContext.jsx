@@ -1,9 +1,12 @@
 import { createContext, useContext, useState } from "react";
 
+
 const DeploymentContext = createContext();
 
 
+
 const getInitialState = () => ({
+
   resourceGroup: {},
 
   storage: {},
@@ -17,40 +20,71 @@ const getInitialState = () => ({
   appServicePlan: {},
 
   functionApp: {},
+
 });
 
 
-export function DeploymentProvider({ children }) {
-
-  const [deploymentData, setDeploymentData] =
-    useState(getInitialState());
 
 
-  const updateSection = (section, data) => {
 
-    setDeploymentData((previous) => ({
+export function DeploymentProvider({children}) {
+
+
+  const [
+    deploymentData,
+    setDeploymentData
+  ] = useState(
+    getInitialState()
+  );
+
+
+
+
+  function updateSection(section,data){
+
+
+    setDeploymentData(previous => ({
+
       ...previous,
+
       [section]: data,
+
     }));
 
-  };
+  }
 
 
-  const resetDeployment = () => {
 
-    setDeploymentData(getInitialState());
 
-  };
+
+  function resetDeployment(){
+
+
+    setDeploymentData(
+      getInitialState()
+    );
+
+
+  }
+
+
+
 
 
   return (
 
     <DeploymentContext.Provider
+
       value={{
+
         deploymentData,
+
         updateSection,
+
         resetDeployment,
+
       }}
+
     >
 
       {children}
@@ -62,8 +96,13 @@ export function DeploymentProvider({ children }) {
 }
 
 
-export function useDeployment() {
 
-  return useContext(DeploymentContext);
+
+
+export function useDeployment(){
+
+  return useContext(
+    DeploymentContext
+  );
 
 }

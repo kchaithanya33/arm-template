@@ -3,55 +3,40 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageMode": {
-            "value": "existing"
+            "value": "new"
         },
         "storageAccountName": {
-            "value": "armstchai002"
+            "value": "armchaist"
         },
-        "existingStorageResourceId": {
-            "value": ""
+        "storageLocation": {
+            "value": "eastus"
         },
-        "existingStorageConnectionString": {
-            "value": ""
+        "storageKind": {
+            "value": "StorageV2"
         },
-        "logicAppMode": {
-            "value": "new"
+        "storageSku": {
+            "value": "Standard_LRS"
         },
-        "logicAppName": {
-            "value": "armstchai002-logic"
+        "accessTier": {
+            "value": "Hot"
         },
-        "logicAppLocation": {
-            "value": "centralindia"
+        "publicNetworkAccess": {
+            "value": "Enabled"
         },
-        "workflowType": {
-            "value": "Consumption"
+        "minimumTlsVersion": {
+            "value": "TLS1_2"
         },
-        "applicationInsightsMode": {
-            "value": "new"
+        "secureTransferRequired": {
+            "value": true
         },
-        "applicationInsightsName": {
-            "value": "armstchai002-appinsights"
+        "allowBlobPublicAccess": {
+            "value": false
         },
-        "applicationInsightsLocation": {
-            "value": "centralindia"
+        "allowSharedKeyAccess": {
+            "value": true
         },
-        "applicationType": {
-            "value": "web"
-        },
-        "applicationInsightsRetentionInDays": {
-            "value": 90
-        },
-        "workspaceMode": {
-            "value": "new"
-        },
-        "workspaceName": {
-            "value": "armstchai002-law"
-        },
-        "workspaceLocation": {
-            "value": "centralindia"
-        },
-        "workspaceSku": {
-            "value": "PerGB2018"
+        "largeFileSharesState": {
+            "value": "Disabled"
         }
     }
 }

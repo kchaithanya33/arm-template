@@ -5,137 +5,102 @@
   "parameters": {
 
     "storageMode": {
-      "type": "string"
+      "type": "string",
+      "allowedValues": [
+        "new",
+        "existing"
+      ]
     },
+
 
     "storageAccountName": {
       "type": "string"
     },
 
+
     "storageLocation": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": ""
     },
+
 
     "storageKind": {
       "type": "string",
-      "defaultValue": "StorageV2"
+      "defaultValue": "StorageV2",
+      "allowedValues": [
+        "StorageV2",
+        "BlobStorage",
+        "FileStorage",
+        "BlockBlobStorage"
+      ]
     },
+
 
     "storageSku": {
       "type": "string",
-      "defaultValue": "Standard_LRS"
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
     },
+
 
     "accessTier": {
       "type": "string",
-      "defaultValue": "Hot"
+      "defaultValue": "Hot",
+      "allowedValues": [
+        "Hot",
+        "Cool"
+      ]
     },
+
 
     "publicNetworkAccess": {
       "type": "string",
-      "defaultValue": "Enabled"
+      "defaultValue": "Enabled",
+      "allowedValues": [
+        "Enabled",
+        "Disabled"
+      ]
     },
+
 
     "minimumTlsVersion": {
       "type": "string",
-      "defaultValue": "TLS1_2"
+      "defaultValue": "TLS1_2",
+      "allowedValues": [
+        "TLS1_0",
+        "TLS1_1",
+        "TLS1_2"
+      ]
     },
+
 
     "secureTransferRequired": {
       "type": "bool",
       "defaultValue": true
     },
 
+
     "allowBlobPublicAccess": {
       "type": "bool",
       "defaultValue": false
     },
+
 
     "allowSharedKeyAccess": {
       "type": "bool",
       "defaultValue": true
     },
 
-    "encryptionType": {
-      "type": "string",
-      "defaultValue": "Microsoft.Storage"
-    },
 
     "largeFileSharesState": {
       "type": "string",
       "defaultValue": "Disabled"
-    },
-
-    "existingStorageResourceId": {
-      "type": "string",
-      "defaultValue": ""
-    },
-
-    "existingStorageConnectionString": {
-      "type": "string",
-      "defaultValue": ""
-    },
-
-
-    "logicAppMode": {
-      "type": "string",
-      "defaultValue": "new"
-    },
-
-    "logicAppName": {
-      "type": "string"
-    },
-
-    "logicAppLocation": {
-      "type": "string"
-    },
-
-    "workflowType": {
-      "type": "string",
-      "defaultValue": "Consumption"
-    },
-
-
-    "applicationInsightsMode": {
-      "type": "string",
-      "defaultValue": "new"
-    },
-
-    "applicationInsightsName": {
-      "type": "string"
-    },
-
-    "applicationInsightsLocation": {
-      "type": "string"
-    },
-
-    "applicationType": {
-      "type": "string",
-      "defaultValue": "web"
-    },
-
-    "applicationInsightsRetentionInDays": {
-      "type": "int",
-      "defaultValue": 90
-    },
-
-
-    "workspaceMode": {
-      "type": "string",
-      "defaultValue": "new"
-    },
-
-    "workspaceName": {
-      "type": "string"
-    },
-
-    "workspaceLocation": {
-      "type": "string"
-    },
-
-    "workspaceSku": {
-      "type": "string",
-      "defaultValue": "PerGB2018"
     }
 
   },
@@ -154,28 +119,40 @@
 
       "location": "[parameters('storageLocation')]",
 
+
       "sku": {
+
         "name": "[parameters('storageSku')]"
+
       },
+
 
       "kind": "[parameters('storageKind')]",
 
 
       "properties": {
 
+
         "accessTier": "[parameters('accessTier')]",
+
 
         "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
 
+
         "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
+
 
         "supportsHttpsTrafficOnly": "[parameters('secureTransferRequired')]",
 
+
         "allowBlobPublicAccess": "[parameters('allowBlobPublicAccess')]",
+
 
         "allowSharedKeyAccess": "[parameters('allowSharedKeyAccess')]",
 
+
         "largeFileSharesState": "[parameters('largeFileSharesState')]",
+
 
 
         "encryption": {
@@ -183,95 +160,27 @@
           "services": {
 
             "blob": {
+
               "enabled": true
+
             },
 
             "file": {
+
               "enabled": true
+
             }
 
           },
 
-          "keySource": "[parameters('encryptionType')]"
+          "keySource": "Microsoft.Storage"
 
         }
 
       }
 
-    },
+    }
 
-
-    {
-      "condition": "[equals(parameters('logicAppMode'),'new')]",
-
-      "type": "Microsoft.Logic/workflows",
-
-      "apiVersion": "2019-05-01",
-
-      "name": "[parameters('logicAppName')]",
-
-      "location": "[parameters('logicAppLocation')]",
-
-      "properties": {
-
-        "state": "Enabled",
-
-        "definition": {
-
-          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-
-          "contentVersion": "1.0.0.0",
-
-          "parameters": {},
-
-          "triggers": {},
-
-          "actions": {}
-
-        }
-
-      }
-
-    },
-
-
-    {
-      "condition": "[equals(parameters('applicationInsightsMode'),'new')]",
-
-      "type": "Microsoft.Insights/components",
-
-      "apiVersion": "2020-02-02",
-
-      "name": "[parameters('applicationInsightsName')]",
-
-      "location": "[parameters('applicationInsightsLocation')]",
-
-      "kind": "web",
-
-      "properties": {
-
-        "Application_Type": "[parameters('applicationType')]",
-
-        "RetentionInDays": "[parameters('applicationInsightsRetentionInDays')]"
-
-      }
-
-    },
-
-
-{
-  "condition": "[equals(parameters('workspaceMode'),'new')]",
-  "type": "Microsoft.OperationalInsights/workspaces",
-  "apiVersion": "2022-10-01",
-  "name": "[parameters('workspaceName')]",
-  "location": "[parameters('workspaceLocation')]",
-
-  "sku": {
-    "name": "[parameters('workspaceSku')]"
-  },
-
-  "properties": {}
-}
   ]
 
 }
