@@ -256,3 +256,104 @@ def validate_storage_account(request):
 
 
     return True
+
+
+# ======================================================
+# Logic App Validation
+# ======================================================
+
+def validate_logic_app(request):
+
+    logic_app = request.logicApp
+
+
+    # Logic App name
+
+    if not logic_app.name:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Logic App name is required"
+
+        )
+
+
+    # Logic App location
+
+    if not logic_app.location:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Logic App location is required"
+
+        )
+
+
+    # Resource Group
+
+    if not logic_app.resourceGroup:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Logic App Resource Group is required"
+
+        )
+
+
+    logic_rg = logic_app.resourceGroup
+
+
+    # Mode
+
+    if logic_rg.mode not in [
+
+        "new",
+
+        "existing"
+
+    ]:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Logic App Resource Group mode must be new or existing"
+
+        )
+
+
+    # Name
+
+    if not logic_rg.name:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Logic App Resource Group name is required"
+
+        )
+
+
+    # New Resource Group requires location
+
+    if logic_rg.mode == "new":
+
+        if not logic_rg.location:
+
+            raise HTTPException(
+
+                status_code=400,
+
+                detail="Logic App Resource Group location is required"
+
+            )
+
+
+    return True

@@ -85,6 +85,39 @@ class StorageAccountModel(BaseModel):
 
 
 
+# ======================================================
+# Logic App Resource Group Model
+# ======================================================
+
+class LogicAppResourceGroupModel(BaseModel):
+
+    # new or existing
+    mode: str
+
+    # Resource Group Name
+    name: str
+
+    # Required only for new
+    location: str | None = None
+
+# ======================================================
+# Logic App Model
+# ======================================================
+
+class LogicAppModel(BaseModel):
+
+    # Always new (for now)
+    mode: str
+
+    # Logic App Name
+    name: str
+
+    # Logic App Location
+    location: str
+
+    # Resource Group
+    resourceGroup: LogicAppResourceGroupModel
+
 
 # ======================================================
 # Main Deployment Request
@@ -104,3 +137,5 @@ class DeploymentRequest(BaseModel):
 
     # Storage Account
     storage: StorageAccountModel
+    
+    logicApp: LogicAppModel

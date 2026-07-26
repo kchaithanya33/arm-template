@@ -203,15 +203,6 @@ def generate_parameters_file(deployment_request):
     elif storage.mode == "existing":
 
 
-        # No ARM parameters required.
-        #
-        # Existing storage account will be:
-        # 1. Validated using resourceId
-        # 2. Referenced directly
-        #
-        # No deployment happens.
-
-
         parameters["parameters"].update(
             {
 
@@ -241,6 +232,73 @@ def generate_parameters_file(deployment_request):
             "Storage mode must be new or existing"
         )
 
+
+
+    # ==================================================
+    # LOGIC APP PARAMETERS
+    # ==================================================
+
+    logic_app = getattr(
+        deployment_request,
+        "logicApp",
+        None
+    )
+
+
+    if logic_app:
+
+
+        logic_parameters = {
+
+
+            "logicAppName": {
+
+                "value":
+                logic_app.name
+
+            },
+
+
+            "logicAppLocation": {
+
+                "value":
+                logic_app.location
+
+            },
+
+
+            "logicAppMode": {
+
+                "value":
+                logic_app.mode
+
+            }
+
+        }
+
+
+
+        # Logic App Resource Group
+
+        if logic_app.resourceGroup:
+
+
+            logic_parameters.update({
+
+                "logicAppResourceGroupName": {
+
+                    "value":
+                    logic_app.resourceGroup.name
+
+                }
+
+            })
+
+
+
+        parameters["parameters"].update(
+            logic_parameters
+        )
 
 
 

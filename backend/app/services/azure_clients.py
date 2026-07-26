@@ -2,21 +2,10 @@ from azure.identity import DefaultAzureCredential
 
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
-from azure.mgmt.applicationinsights import ApplicationInsightsManagementClient
-from azure.mgmt.loganalytics import LogAnalyticsManagementClient
-from azure.mgmt.subscription import SubscriptionClient
-from azure.mgmt.web import WebSiteManagementClient
+from azure.mgmt.logic import LogicManagementClient
 
 
-
-# ======================================================
-# Authentication
-# ======================================================
-
-def get_credential():
-
-    return DefaultAzureCredential()
-
+credential = DefaultAzureCredential()
 
 
 # ======================================================
@@ -26,10 +15,9 @@ def get_credential():
 def get_resource_client(subscription_id):
 
     return ResourceManagementClient(
-        get_credential(),
+        credential,
         subscription_id
     )
-
 
 
 # ======================================================
@@ -39,58 +27,18 @@ def get_resource_client(subscription_id):
 def get_storage_client(subscription_id):
 
     return StorageManagementClient(
-        get_credential(),
+        credential,
         subscription_id
     )
 
 
-
 # ======================================================
-# Application Insights Client
+# Logic App Client
 # ======================================================
 
-def get_appinsights_client(subscription_id):
+def get_logic_client(subscription_id):
 
-    return ApplicationInsightsManagementClient(
-        get_credential(),
+    return LogicManagementClient(
+        credential,
         subscription_id
-    )
-
-
-
-# ======================================================
-# Log Analytics Client
-# ======================================================
-
-def get_loganalytics_client(subscription_id):
-
-    return LogAnalyticsManagementClient(
-        get_credential(),
-        subscription_id
-    )
-
-
-
-# ======================================================
-# Web Client
-# Used for App Service / Function Apps
-# ======================================================
-
-def get_web_client(subscription_id):
-
-    return WebSiteManagementClient(
-        get_credential(),
-        subscription_id
-    )
-
-
-
-# ======================================================
-# Subscription Client
-# ======================================================
-
-def get_subscription_client():
-
-    return SubscriptionClient(
-        get_credential()
     )

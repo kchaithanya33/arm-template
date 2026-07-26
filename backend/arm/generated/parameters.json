@@ -6,7 +6,7 @@
             "value": "new"
         },
         "storageAccountName": {
-            "value": "armchaist"
+            "value": "armdemostorage001"
         },
         "storageLocation": {
             "value": "eastus"
@@ -37,6 +37,18 @@
         },
         "largeFileSharesState": {
             "value": "Disabled"
+        },
+        "logicAppName": {
+            "value": "arm-demo-logic-new002"
+        },
+        "logicAppLocation": {
+            "value": "eastus"
+        },
+        "logicAppMode": {
+            "value": "new"
+        },
+        "logicAppResourceGroupName": {
+            "value": "arm-demo-rg-new"
         }
     }
 }
