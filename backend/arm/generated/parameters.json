@@ -6,13 +6,13 @@
             "value": "new"
         },
         "storageAccountName": {
-            "value": "armdemostorage001"
+            "value": "mainstorageaccount001"
         },
         "storageLocation": {
             "value": "eastus"
         },
         "storageResourceGroupName": {
-            "value": "arm-demo-rg1"
+            "value": "func-demo-rg"
         },
         "storageKind": {
             "value": "StorageV2"
@@ -42,7 +42,7 @@
             "value": "Disabled"
         },
         "logicAppName": {
-            "value": "logic-demo-app"
+            "value": "demo-logic-app-001"
         },
         "logicAppLocation": {
             "value": "eastus"
@@ -51,7 +51,58 @@
             "value": "new"
         },
         "logicAppResourceGroupName": {
-            "value": "arm-demo-rg2"
+            "value": "func-demo-rg"
+        },
+        "functionAppName": {
+            "value": "demoarmchai"
+        },
+        "functionAppLocation": {
+            "value": "eastus"
+        },
+        "functionRuntimeStack": {
+            "value": "python"
+        },
+        "functionRuntimeVersion": {
+            "value": "3.11"
+        },
+        "functionResourceGroupName": {
+            "value": "func-demo-rg"
+        },
+        "functionStorageMode": {
+            "value": "new"
+        },
+        "functionStorageAccountName": {
+            "value": "mainstorageaccount001"
+        },
+        "functionStorageLocation": {
+            "value": "eastus"
+        },
+        "functionStorageKind": {
+            "value": "StorageV2"
+        },
+        "functionStorageSku": {
+            "value": "Standard_LRS"
+        },
+        "functionStorageAccessTier": {
+            "value": "Hot"
+        },
+        "functionStoragePublicNetworkAccess": {
+            "value": "Enabled"
+        },
+        "functionStorageMinimumTlsVersion": {
+            "value": "TLS1_2"
+        },
+        "functionStorageSecureTransferRequired": {
+            "value": true
+        },
+        "functionStorageAllowBlobPublicAccess": {
+            "value": false
+        },
+        "functionStorageAllowSharedKeyAccess": {
+            "value": true
+        },
+        "functionStorageLargeFileSharesState": {
+            "value": "Disabled"
         }
     }
 }

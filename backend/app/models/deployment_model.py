@@ -107,7 +107,7 @@ class LogicAppResourceGroupModel(BaseModel):
 class LogicAppModel(BaseModel):
 
     # Always new (for now)
-    mode: str
+    mode: str = "new"
 
     # Logic App Name
     name: str
@@ -118,7 +118,80 @@ class LogicAppModel(BaseModel):
     # Resource Group
     resourceGroup: LogicAppResourceGroupModel
 
+# ======================================================
+# Function App Storage Model
+# ======================================================
 
+class FunctionAppStorageModel(BaseModel):
+
+    # new or existing
+    mode: str
+
+    # Storage Account Name
+    name: str
+
+
+    # NEW STORAGE ONLY
+
+    location: str | None = None
+
+    kind: str | None = "StorageV2"
+
+    sku: str | None = "Standard_LRS"
+
+    accessTier: str | None = "Hot"
+
+    publicNetworkAccess: str | None = "Enabled"
+
+    minimumTlsVersion: str | None = "TLS1_2"
+
+    secureTransferRequired: bool | None = True
+
+    allowBlobPublicAccess: bool | None = False
+
+    allowSharedKeyAccess: bool | None = True
+
+    largeFileSharesState: str | None = "Disabled"
+
+
+    # EXISTING STORAGE ONLY
+
+    resourceId: str | None = None
+
+# ======================================================
+# Function App Resource Group Model
+# ======================================================
+
+class FunctionAppResourceGroupModel(BaseModel):
+
+    # new or existing
+    mode: str
+
+    # Resource Group Name
+    name: str
+
+    # Required only for new
+    location: str | None = None
+    
+class FunctionAppModel(BaseModel):
+
+    # Function App Name
+    name: str
+
+    # Function App Location
+    location: str
+
+    # Runtime Stack
+    runtimeStack: str
+
+    # Runtime Version
+    runtimeVersion: str
+    functionPlanName: str | None = None
+    # Storage Account
+    storageAccount: FunctionAppStorageModel
+
+    # Resource Group
+    resourceGroup: FunctionAppResourceGroupModel
 # ======================================================
 # Main Deployment Request
 # ======================================================
@@ -139,3 +212,5 @@ class DeploymentRequest(BaseModel):
     storage: StorageAccountModel
     
     logicApp: LogicAppModel
+    
+    functionApp: FunctionAppModel

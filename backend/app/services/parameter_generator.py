@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 # ======================================================
-# Generate Storage Account ARM Parameters
+# Generate ARM Parameters File
 # ======================================================
 
 def generate_parameters_file(deployment_request):
@@ -47,8 +47,6 @@ def generate_parameters_file(deployment_request):
 
 
 
-        # New / Existing
-
         "storageMode": {
 
             "value":
@@ -56,9 +54,6 @@ def generate_parameters_file(deployment_request):
 
         },
 
-
-
-        # Storage Account Name
 
         "storageAccountName": {
 
@@ -90,13 +85,14 @@ def generate_parameters_file(deployment_request):
                 storage.location
 
             },
+
+
             "storageResourceGroupName": {
 
-    "value":
-    storage.resourceGroup.name
+                "value":
+                storage.resourceGroup.name
 
-},
-
+            },
 
 
             "storageKind": {
@@ -107,14 +103,12 @@ def generate_parameters_file(deployment_request):
             },
 
 
-
             "storageSku": {
 
                 "value":
                 storage.sku
 
             },
-
 
 
             "accessTier": {
@@ -127,7 +121,6 @@ def generate_parameters_file(deployment_request):
             },
 
 
-
             "publicNetworkAccess": {
 
                 "value":
@@ -136,7 +129,6 @@ def generate_parameters_file(deployment_request):
                 else "Enabled"
 
             },
-
 
 
             "minimumTlsVersion": {
@@ -149,7 +141,6 @@ def generate_parameters_file(deployment_request):
             },
 
 
-
             "secureTransferRequired": {
 
                 "value":
@@ -158,7 +149,6 @@ def generate_parameters_file(deployment_request):
                 else True
 
             },
-
 
 
             "allowBlobPublicAccess": {
@@ -171,7 +161,6 @@ def generate_parameters_file(deployment_request):
             },
 
 
-
             "allowSharedKeyAccess": {
 
                 "value":
@@ -180,7 +169,6 @@ def generate_parameters_file(deployment_request):
                 else True
 
             },
-
 
 
             "largeFileSharesState": {
@@ -193,7 +181,6 @@ def generate_parameters_file(deployment_request):
             }
 
         })
-
 
 
         parameters["parameters"].update(
@@ -219,6 +206,7 @@ def generate_parameters_file(deployment_request):
 
                 },
 
+
                 "storageAccountName": {
 
                     "value":
@@ -233,10 +221,11 @@ def generate_parameters_file(deployment_request):
 
     else:
 
-
         raise ValueError(
             "Storage mode must be new or existing"
         )
+
+
 
 
 
@@ -284,8 +273,6 @@ def generate_parameters_file(deployment_request):
 
 
 
-        # Logic App Resource Group
-
         if logic_app.resourceGroup:
 
 
@@ -305,6 +292,220 @@ def generate_parameters_file(deployment_request):
         parameters["parameters"].update(
             logic_parameters
         )
+
+
+
+
+    # ==================================================
+    # FUNCTION APP PARAMETERS  (NEW)
+    # ==================================================
+
+    function_app = getattr(
+        deployment_request,
+        "functionApp",
+        None
+    )
+
+
+
+    if function_app:
+
+
+
+        function_parameters = {
+
+
+            "functionAppName": {
+
+                "value":
+                function_app.name
+
+            },
+
+
+            "functionAppLocation": {
+
+                "value":
+                function_app.location
+
+            },
+
+
+            "functionRuntimeStack": {
+
+                "value":
+                function_app.runtimeStack
+
+            },
+
+
+            "functionRuntimeVersion": {
+
+                "value":
+                function_app.runtimeVersion
+
+            },
+
+
+            "functionResourceGroupName": {
+
+                "value":
+                function_app.resourceGroup.name
+
+            }
+
+        }
+
+
+
+
+        # ==================================================
+        # FUNCTION APP STORAGE
+        # ==================================================
+
+        function_storage = function_app.storageAccount
+
+
+
+        function_parameters.update({
+
+
+            "functionStorageMode": {
+
+                "value":
+                function_storage.mode
+
+            },
+
+
+            "functionStorageAccountName": {
+
+                "value":
+                function_storage.name
+
+            }
+
+        })
+
+
+
+
+        # ==================================================
+        # NEW FUNCTION STORAGE DEFAULT VALUES
+        # ==================================================
+
+        if function_storage.mode == "new":
+
+
+            function_parameters.update({
+
+
+                "functionStorageLocation": {
+
+                    "value":
+                    function_storage.location
+
+                },
+
+
+                "functionStorageKind": {
+
+                    "value":
+                    function_storage.kind
+                    if function_storage.kind
+                    else "StorageV2"
+
+                },
+
+
+                "functionStorageSku": {
+
+                    "value":
+                    function_storage.sku
+                    if function_storage.sku
+                    else "Standard_LRS"
+
+                },
+
+
+                "functionStorageAccessTier": {
+
+                    "value":
+                    function_storage.accessTier
+                    if function_storage.accessTier
+                    else "Hot"
+
+                },
+
+
+                "functionStoragePublicNetworkAccess": {
+
+                    "value":
+                    function_storage.publicNetworkAccess
+                    if function_storage.publicNetworkAccess
+                    else "Enabled"
+
+                },
+
+
+                "functionStorageMinimumTlsVersion": {
+
+                    "value":
+                    function_storage.minimumTlsVersion
+                    if function_storage.minimumTlsVersion
+                    else "TLS1_2"
+
+                },
+
+
+                "functionStorageSecureTransferRequired": {
+
+                    "value":
+                    function_storage.secureTransferRequired
+                    if function_storage.secureTransferRequired is not None
+                    else True
+
+                },
+
+
+                "functionStorageAllowBlobPublicAccess": {
+
+                    "value":
+                    function_storage.allowBlobPublicAccess
+                    if function_storage.allowBlobPublicAccess is not None
+                    else False
+
+                },
+
+
+                "functionStorageAllowSharedKeyAccess": {
+
+                    "value":
+                    function_storage.allowSharedKeyAccess
+                    if function_storage.allowSharedKeyAccess is not None
+                    else True
+
+                },
+
+
+                "functionStorageLargeFileSharesState": {
+
+                    "value":
+                    function_storage.largeFileSharesState
+                    if function_storage.largeFileSharesState
+                    else "Disabled"
+
+                }
+
+            })
+
+
+
+        parameters["parameters"].update(
+            function_parameters
+        )
+
+
 
 
 

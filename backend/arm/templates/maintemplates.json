@@ -7,7 +7,8 @@
       "allowedValues": [
         "new",
         "existing"
-      ]
+      ],
+      "defaultValue": "new"
     },
     "storageAccountName": {
       "type": "string"
@@ -17,7 +18,7 @@
     },
     "storageLocation": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "[resourceGroup().location]"
     },
     "storageKind": {
       "type": "string",
@@ -65,56 +66,97 @@
     },
     "logicAppLocation": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "[resourceGroup().location]"
     },
     "logicAppResourceGroupName": {
       "type": "string"
+    },
+    "functionAppName": {
+      "type": "string"
+    },
+    "functionAppLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "functionRuntimeStack": {
+      "type": "string",
+      "defaultValue": "python"
+    },
+    "functionRuntimeVersion": {
+      "type": "string",
+      "defaultValue": "3.11"
+    },
+    "functionResourceGroupName": {
+      "type": "string"
+    },
+    "functionPlanName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "functionStorageMode": {
+      "type": "string",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "defaultValue": "new"
+    },
+    "functionStorageAccountName": {
+      "type": "string"
+    },
+    "functionStorageLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "functionStorageKind": {
+      "type": "string",
+      "defaultValue": "StorageV2"
+    },
+    "functionStorageSku": {
+      "type": "string",
+      "defaultValue": "Standard_LRS"
+    },
+    "functionStorageAccessTier": {
+      "type": "string",
+      "defaultValue": "Hot"
+    },
+    "functionStoragePublicNetworkAccess": {
+      "type": "string",
+      "defaultValue": "Enabled"
+    },
+    "functionStorageMinimumTlsVersion": {
+      "type": "string",
+      "defaultValue": "TLS1_2"
+    },
+    "functionStorageSecureTransferRequired": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "functionStorageAllowBlobPublicAccess": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "functionStorageAllowSharedKeyAccess": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "functionStorageLargeFileSharesState": {
+      "type": "string",
+      "defaultValue": "Disabled"
     }
+  },
+  "variables": {
+    "flexPlanName": "[if(empty(parameters('functionPlanName')), concat(parameters('functionAppName'), '-flex-plan'), parameters('functionPlanName'))]"
   },
   "resources": [
     {
-      "condition": "[equals(parameters('storageMode'),'new')]",
+      "condition": "[equals(parameters('storageMode'), 'new')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "storageAccountDeployment",
       "resourceGroup": "[parameters('storageResourceGroupName')]",
       "properties": {
         "mode": "Incremental",
-        "parameters": {
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          },
-          "storageLocation": {
-            "value": "[parameters('storageLocation')]"
-          },
-          "storageKind": {
-            "value": "[parameters('storageKind')]"
-          },
-          "storageSku": {
-            "value": "[parameters('storageSku')]"
-          },
-          "accessTier": {
-            "value": "[parameters('accessTier')]"
-          },
-          "publicNetworkAccess": {
-            "value": "[parameters('publicNetworkAccess')]"
-          },
-          "minimumTlsVersion": {
-            "value": "[parameters('minimumTlsVersion')]"
-          },
-          "secureTransferRequired": {
-            "value": "[parameters('secureTransferRequired')]"
-          },
-          "allowBlobPublicAccess": {
-            "value": "[parameters('allowBlobPublicAccess')]"
-          },
-          "allowSharedKeyAccess": {
-            "value": "[parameters('allowSharedKeyAccess')]"
-          },
-          "largeFileSharesState": {
-            "value": "[parameters('largeFileSharesState')]"
-          }
-        },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
@@ -174,25 +216,52 @@
               }
             }
           ]
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "storageLocation": {
+            "value": "[parameters('storageLocation')]"
+          },
+          "storageKind": {
+            "value": "[parameters('storageKind')]"
+          },
+          "storageSku": {
+            "value": "[parameters('storageSku')]"
+          },
+          "accessTier": {
+            "value": "[parameters('accessTier')]"
+          },
+          "publicNetworkAccess": {
+            "value": "[parameters('publicNetworkAccess')]"
+          },
+          "minimumTlsVersion": {
+            "value": "[parameters('minimumTlsVersion')]"
+          },
+          "secureTransferRequired": {
+            "value": "[parameters('secureTransferRequired')]"
+          },
+          "allowBlobPublicAccess": {
+            "value": "[parameters('allowBlobPublicAccess')]"
+          },
+          "allowSharedKeyAccess": {
+            "value": "[parameters('allowSharedKeyAccess')]"
+          },
+          "largeFileSharesState": {
+            "value": "[parameters('largeFileSharesState')]"
+          }
         }
       }
     },
     {
-      "condition": "[equals(parameters('logicAppMode'),'new')]",
+      "condition": "[equals(parameters('logicAppMode'), 'new')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "logicAppDeployment",
       "resourceGroup": "[parameters('logicAppResourceGroupName')]",
       "properties": {
         "mode": "Incremental",
-        "parameters": {
-          "logicAppName": {
-            "value": "[parameters('logicAppName')]"
-          },
-          "logicAppLocation": {
-            "value": "[parameters('logicAppLocation')]"
-          }
-        },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
@@ -221,6 +290,189 @@
                 },
                 "parameters": {}
               }
+            }
+          ]
+        },
+        "parameters": {
+          "logicAppName": {
+            "value": "[parameters('logicAppName')]"
+          },
+          "logicAppLocation": {
+            "value": "[parameters('logicAppLocation')]"
+          }
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('functionStorageMode'), 'new')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "functionStorageDeployment",
+      "resourceGroup": "[parameters('functionResourceGroupName')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "functionStorageAccountName": {
+              "type": "string"
+            },
+            "functionStorageLocation": {
+              "type": "string"
+            },
+            "functionStorageKind": {
+              "type": "string"
+            },
+            "functionStorageSku": {
+              "type": "string"
+            },
+            "functionStorageAccessTier": {
+              "type": "string"
+            },
+            "functionStoragePublicNetworkAccess": {
+              "type": "string"
+            },
+            "functionStorageMinimumTlsVersion": {
+              "type": "string"
+            },
+            "functionStorageSecureTransferRequired": {
+              "type": "bool"
+            },
+            "functionStorageAllowBlobPublicAccess": {
+              "type": "bool"
+            },
+            "functionStorageAllowSharedKeyAccess": {
+              "type": "bool"
+            },
+            "functionStorageLargeFileSharesState": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('functionStorageAccountName')]",
+              "location": "[parameters('functionStorageLocation')]",
+              "sku": {
+                "name": "[parameters('functionStorageSku')]"
+              },
+              "kind": "[parameters('functionStorageKind')]",
+              "properties": {
+                "accessTier": "[parameters('functionStorageAccessTier')]",
+                "publicNetworkAccess": "[parameters('functionStoragePublicNetworkAccess')]",
+                "minimumTlsVersion": "[parameters('functionStorageMinimumTlsVersion')]",
+                "supportsHttpsTrafficOnly": "[parameters('functionStorageSecureTransferRequired')]",
+                "allowBlobPublicAccess": "[parameters('functionStorageAllowBlobPublicAccess')]",
+                "allowSharedKeyAccess": "[parameters('functionStorageAllowSharedKeyAccess')]",
+                "largeFileSharesState": "[parameters('functionStorageLargeFileSharesState')]"
+              }
+            }
+          ]
+        },
+        "parameters": {
+          "functionStorageAccountName": {
+            "value": "[parameters('functionStorageAccountName')]"
+          },
+          "functionStorageLocation": {
+            "value": "[parameters('functionStorageLocation')]"
+          },
+          "functionStorageKind": {
+            "value": "[parameters('functionStorageKind')]"
+          },
+          "functionStorageSku": {
+            "value": "[parameters('functionStorageSku')]"
+          },
+          "functionStorageAccessTier": {
+            "value": "[parameters('functionStorageAccessTier')]"
+          },
+          "functionStoragePublicNetworkAccess": {
+            "value": "[parameters('functionStoragePublicNetworkAccess')]"
+          },
+          "functionStorageMinimumTlsVersion": {
+            "value": "[parameters('functionStorageMinimumTlsVersion')]"
+          },
+          "functionStorageSecureTransferRequired": {
+            "value": "[parameters('functionStorageSecureTransferRequired')]"
+          },
+          "functionStorageAllowBlobPublicAccess": {
+            "value": "[parameters('functionStorageAllowBlobPublicAccess')]"
+          },
+          "functionStorageAllowSharedKeyAccess": {
+            "value": "[parameters('functionStorageAllowSharedKeyAccess')]"
+          },
+          "functionStorageLargeFileSharesState": {
+            "value": "[parameters('functionStorageLargeFileSharesState')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2024-04-01",
+      "name": "[variables('flexPlanName')]",
+      "location": "[parameters('functionAppLocation')]",
+      "sku": {
+        "name": "FC1",
+        "tier": "FlexConsumption"
+      },
+      "kind": "functionapp",
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2024-04-01",
+      "name": "[parameters('functionAppName')]",
+      "location": "[parameters('functionAppLocation')]",
+      "kind": "functionapp,linux,flex",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('flexPlanName'))]",
+        "[if(equals(parameters('functionStorageMode'), 'new'), resourceId('Microsoft.Resources/deployments', 'functionStorageDeployment'), json('null'))]"
+      ],
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('flexPlanName'))]",
+        "functionAppConfig": {
+          "deployment": {
+            "storage": {
+              "type": "blobContainer",
+              "value": "[concat('https://', parameters('functionStorageAccountName'), '.blob.core.windows.net/function-deployments')]",
+              "authentication": {
+                "type": "SystemAssignedIdentity"
+              }
+            }
+          },
+          "runtime": {
+            "name": "[parameters('functionRuntimeStack')]",
+            "version": "[parameters('functionRuntimeVersion')]"
+          },
+          "scaleAndConcurrency": {
+            "maximumInstanceCount": 100,
+            "instanceMemoryMB": 2048
+          }
+        },
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "AzureWebJobsStorage__accountName",
+              "value": "[parameters('functionStorageAccountName')]"
+            },
+            {
+              "name": "AzureWebJobsStorage__credential",
+              "value": "managedidentity"
+            },
+            {
+              "name": "AzureWebJobsStorage__blobServiceUri",
+              "value": "[concat('https://', parameters('functionStorageAccountName'), '.blob.core.windows.net')]"
             }
           ]
         }

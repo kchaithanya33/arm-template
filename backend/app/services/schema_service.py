@@ -357,3 +357,155 @@ def validate_logic_app(request):
 
 
     return True
+
+
+# ======================================================
+# Function App Validation
+# ======================================================
+
+def validate_function_app(request):
+
+    function_app = request.functionApp
+
+
+    # ==================================================
+    # FUNCTION APP BASIC VALIDATION
+    # ==================================================
+
+    if not function_app.name:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App name is required"
+        )
+
+
+    if not function_app.location:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App location is required"
+        )
+
+
+    if not function_app.runtimeStack:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App runtime stack is required"
+        )
+
+
+    if not function_app.runtimeVersion:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App runtime version is required"
+        )
+
+
+    # ==================================================
+    # FUNCTION APP STORAGE VALIDATION
+    # ==================================================
+
+    if not function_app.storageAccount:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Storage Account is required"
+        )
+
+
+    storage = function_app.storageAccount
+
+
+    if storage.mode not in [
+        "new",
+        "existing"
+    ]:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Storage mode must be new or existing"
+        )
+
+
+    if not storage.name:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Storage Account name is required"
+        )
+
+
+    # Existing Storage Account
+
+    if storage.mode == "existing":
+
+        if not storage.resourceId:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Storage Account resourceId is required for existing Storage Account"
+            )
+
+
+    # New Storage Account
+
+    if storage.mode == "new":
+
+        if not storage.location:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Storage Account location is required for new Storage Account"
+            )
+
+
+    # ==================================================
+    # FUNCTION APP RESOURCE GROUP VALIDATION
+    # ==================================================
+
+    if not function_app.resourceGroup:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Resource Group is required"
+        )
+
+
+    function_rg = function_app.resourceGroup
+
+
+    if function_rg.mode not in [
+        "new",
+        "existing"
+    ]:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Resource Group mode must be new or existing"
+        )
+
+
+    if not function_rg.name:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Function App Resource Group name is required"
+        )
+
+
+    # New Resource Group requires location
+
+    if function_rg.mode == "new":
+
+        if not function_rg.location:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Function App Resource Group location is required"
+            )
+
+
+    return True
