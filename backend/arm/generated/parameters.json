@@ -11,6 +11,9 @@
         "storageLocation": {
             "value": "eastus"
         },
+        "storageResourceGroupName": {
+            "value": "arm-demo-rg1"
+        },
         "storageKind": {
             "value": "StorageV2"
         },
@@ -39,7 +42,7 @@
             "value": "Disabled"
         },
         "logicAppName": {
-            "value": "arm-demo-logic-new002"
+            "value": "logic-demo-app"
         },
         "logicAppLocation": {
             "value": "eastus"
@@ -48,7 +51,7 @@
             "value": "new"
         },
         "logicAppResourceGroupName": {
-            "value": "arm-demo-rg-new"
+            "value": "arm-demo-rg2"
         }
     }
 }

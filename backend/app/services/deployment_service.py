@@ -23,6 +23,10 @@ from app.services.azure_resource_service import (
 # MAIN DEPLOYMENT FUNCTION
 # ======================================================
 
+# ======================================================
+# MAIN DEPLOYMENT FUNCTION
+# ======================================================
+
 def deploy_application(deployment_request):
 
     # ------------------------------------------
@@ -33,6 +37,7 @@ def deploy_application(deployment_request):
         deployment_request
     )
 
+
     # ------------------------------------------
     # Validate Storage
     # ------------------------------------------
@@ -40,6 +45,7 @@ def deploy_application(deployment_request):
     storage_result = process_storage_account(
         deployment_request
     )
+
 
     # ------------------------------------------
     # Validate Logic App
@@ -49,24 +55,52 @@ def deploy_application(deployment_request):
         deployment_request
     )
 
+
     # ------------------------------------------
-    # Generate ONE parameter file
+    # Deploy Storage ARM Template
+    # Storage will use its own Resource Group
     # ------------------------------------------
 
-    parameter_file = generate_parameters_file(
+    storage_deployment_result = None
+
+
+    if deployment_request.storage.mode == "new":
+
+
+        storage_parameter_file = generate_parameters_file(
+            deployment_request
+        )
+
+
+        storage_deployment_result = create_resource_group_deployment(
+
+            resource_group_name=
+                deployment_request.storage.resourceGroup.name,
+
+            parameter_file=storage_parameter_file
+
+        )
+
+
+    # ------------------------------------------
+    # Deploy Logic App ARM Template
+    # Logic App will use its own Resource Group
+    # ------------------------------------------
+
+    logic_parameter_file = generate_parameters_file(
         deployment_request
     )
 
-    # ------------------------------------------
-    # Deploy ARM Template ONCE
-    # ------------------------------------------
 
-    deployment_rg = deployment_request.resourceGroup.name
+    logic_deployment_result = create_resource_group_deployment(
 
-    deployment_result = create_resource_group_deployment(
-        resource_group_name=deployment_rg,
-        parameter_file=parameter_file
+        resource_group_name=
+            deployment_request.logicApp.resourceGroup.name,
+
+        parameter_file=logic_parameter_file
+
     )
+
 
     return {
 
@@ -76,11 +110,11 @@ def deploy_application(deployment_request):
 
         "logicApp": logic_result,
 
-        "deployment": deployment_result
+        "storageDeployment": storage_deployment_result,
+
+        "logicDeployment": logic_deployment_result
 
     }
-
-
 # ======================================================
 # RESOURCE GROUP
 # ======================================================

@@ -1,9 +1,7 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-
   "parameters": {
-
     "storageMode": {
       "type": "string",
       "allowedValues": [
@@ -11,258 +9,222 @@
         "existing"
       ]
     },
-
     "storageAccountName": {
       "type": "string"
     },
-
+    "storageResourceGroupName": {
+      "type": "string"
+    },
     "storageLocation": {
       "type": "string",
       "defaultValue": ""
     },
-
     "storageKind": {
       "type": "string",
-      "defaultValue": "StorageV2",
-      "allowedValues": [
-        "StorageV2",
-        "BlobStorage",
-        "FileStorage",
-        "BlockBlobStorage"
-      ]
+      "defaultValue": "StorageV2"
     },
-
     "storageSku": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_ZRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
-      ]
+      "defaultValue": "Standard_LRS"
     },
-
     "accessTier": {
       "type": "string",
-      "defaultValue": "Hot",
-      "allowedValues": [
-        "Hot",
-        "Cool"
-      ]
+      "defaultValue": "Hot"
     },
-
     "publicNetworkAccess": {
       "type": "string",
-      "defaultValue": "Enabled",
-      "allowedValues": [
-        "Enabled",
-        "Disabled"
-      ]
+      "defaultValue": "Enabled"
     },
-
     "minimumTlsVersion": {
       "type": "string",
-      "defaultValue": "TLS1_2",
-      "allowedValues": [
-        "TLS1_0",
-        "TLS1_1",
-        "TLS1_2"
-      ]
+      "defaultValue": "TLS1_2"
     },
-
     "secureTransferRequired": {
       "type": "bool",
       "defaultValue": true
     },
-
     "allowBlobPublicAccess": {
       "type": "bool",
       "defaultValue": false
     },
-
     "allowSharedKeyAccess": {
       "type": "bool",
       "defaultValue": true
     },
-
     "largeFileSharesState": {
       "type": "string",
       "defaultValue": "Disabled"
     },
-
-
     "logicAppMode": {
       "type": "string",
-      "defaultValue": "new",
-      "allowedValues": [
-        "new",
-        "existing"
-      ]
+      "defaultValue": "new"
     },
-
     "logicAppName": {
       "type": "string",
       "defaultValue": ""
     },
-
     "logicAppLocation": {
       "type": "string",
       "defaultValue": ""
     },
-
     "logicAppResourceGroupName": {
-      "type": "string",
-      "defaultValue": ""
+      "type": "string"
     }
-
   },
-
-
   "resources": [
-
     {
       "condition": "[equals(parameters('storageMode'),'new')]",
-
-      "type": "Microsoft.Storage/storageAccounts",
-
-      "apiVersion": "2023-01-01",
-
-      "name": "[parameters('storageAccountName')]",
-
-      "location": "[parameters('storageLocation')]",
-
-
-      "sku": {
-        "name": "[parameters('storageSku')]"
-      },
-
-
-      "kind": "[parameters('storageKind')]",
-
-
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "storageAccountDeployment",
+      "resourceGroup": "[parameters('storageResourceGroupName')]",
       "properties": {
-
-        "accessTier": "[parameters('accessTier')]",
-
-        "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
-
-        "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
-
-        "supportsHttpsTrafficOnly": "[parameters('secureTransferRequired')]",
-
-        "allowBlobPublicAccess": "[parameters('allowBlobPublicAccess')]",
-
-        "allowSharedKeyAccess": "[parameters('allowSharedKeyAccess')]",
-
-        "largeFileSharesState": "[parameters('largeFileSharesState')]",
-
-
-        "encryption": {
-
-          "services": {
-
-            "blob": {
-              "enabled": true
-            },
-
-            "file": {
-              "enabled": true
-            }
-
+        "mode": "Incremental",
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
           },
-
-          "keySource": "Microsoft.Storage"
-
+          "storageLocation": {
+            "value": "[parameters('storageLocation')]"
+          },
+          "storageKind": {
+            "value": "[parameters('storageKind')]"
+          },
+          "storageSku": {
+            "value": "[parameters('storageSku')]"
+          },
+          "accessTier": {
+            "value": "[parameters('accessTier')]"
+          },
+          "publicNetworkAccess": {
+            "value": "[parameters('publicNetworkAccess')]"
+          },
+          "minimumTlsVersion": {
+            "value": "[parameters('minimumTlsVersion')]"
+          },
+          "secureTransferRequired": {
+            "value": "[parameters('secureTransferRequired')]"
+          },
+          "allowBlobPublicAccess": {
+            "value": "[parameters('allowBlobPublicAccess')]"
+          },
+          "allowSharedKeyAccess": {
+            "value": "[parameters('allowSharedKeyAccess')]"
+          },
+          "largeFileSharesState": {
+            "value": "[parameters('largeFileSharesState')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "storageAccountName": {
+              "type": "string"
+            },
+            "storageLocation": {
+              "type": "string"
+            },
+            "storageKind": {
+              "type": "string"
+            },
+            "storageSku": {
+              "type": "string"
+            },
+            "accessTier": {
+              "type": "string"
+            },
+            "publicNetworkAccess": {
+              "type": "string"
+            },
+            "minimumTlsVersion": {
+              "type": "string"
+            },
+            "secureTransferRequired": {
+              "type": "bool"
+            },
+            "allowBlobPublicAccess": {
+              "type": "bool"
+            },
+            "allowSharedKeyAccess": {
+              "type": "bool"
+            },
+            "largeFileSharesState": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('storageAccountName')]",
+              "location": "[parameters('storageLocation')]",
+              "sku": {
+                "name": "[parameters('storageSku')]"
+              },
+              "kind": "[parameters('storageKind')]",
+              "properties": {
+                "accessTier": "[parameters('accessTier')]",
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+                "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
+                "supportsHttpsTrafficOnly": "[parameters('secureTransferRequired')]",
+                "allowBlobPublicAccess": "[parameters('allowBlobPublicAccess')]",
+                "allowSharedKeyAccess": "[parameters('allowSharedKeyAccess')]",
+                "largeFileSharesState": "[parameters('largeFileSharesState')]"
+              }
+            }
+          ]
         }
-
       }
-
     },
-
-
     {
       "condition": "[equals(parameters('logicAppMode'),'new')]",
-
-
       "type": "Microsoft.Resources/deployments",
-
       "apiVersion": "2021-04-01",
-
-
       "name": "logicAppDeployment",
-
-
       "resourceGroup": "[parameters('logicAppResourceGroupName')]",
-
-
       "properties": {
-
         "mode": "Incremental",
-
-
+        "parameters": {
+          "logicAppName": {
+            "value": "[parameters('logicAppName')]"
+          },
+          "logicAppLocation": {
+            "value": "[parameters('logicAppLocation')]"
+          }
+        },
         "template": {
-
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-
-
           "contentVersion": "1.0.0.0",
-
-
-          "resources": [
-
-            {
-
-              "type": "Microsoft.Logic/workflows",
-
-              "apiVersion": "2019-05-01",
-
-
-              "name": "[parameters('logicAppName')]",
-
-
-              "location": "[parameters('logicAppLocation')]",
-
-
-              "properties": {
-
-                "state": "Enabled",
-
-
-                "definition": {
-
-                  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-
-
-                  "contentVersion": "1.0.0.0",
-
-
-                  "parameters": {},
-
-
-                  "triggers": {},
-
-
-                  "actions": {}
-
-                },
-
-
-                "parameters": {}
-
-              }
-
+          "parameters": {
+            "logicAppName": {
+              "type": "string"
+            },
+            "logicAppLocation": {
+              "type": "string"
             }
-
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Logic/workflows",
+              "apiVersion": "2019-05-01",
+              "name": "[parameters('logicAppName')]",
+              "location": "[parameters('logicAppLocation')]",
+              "properties": {
+                "state": "Enabled",
+                "definition": {
+                  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                  "contentVersion": "1.0.0.0",
+                  "parameters": {},
+                  "triggers": {},
+                  "actions": {}
+                },
+                "parameters": {}
+              }
+            }
           ]
-
         }
-
       }
-
     }
-
   ]
-
 }

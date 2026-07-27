@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceGroupName": {
-            "value": "arm-demo-rg-new"
+            "value": "arm-demo-rg2"
         },
         "resourceGroupLocation": {
             "value": "eastus"

@@ -90,6 +90,12 @@ def generate_parameters_file(deployment_request):
                 storage.location
 
             },
+            "storageResourceGroupName": {
+
+    "value":
+    storage.resourceGroup.name
+
+},
 
 
 
