@@ -5,7 +5,7 @@ import Storage from "../pages/Storage";
 import LogicApp from "../pages/LogicApp";
 import FunctionApp from "../pages/FunctionApp";
 import Payload from "../pages/Payload";
-import Deploy from "../pages/Deploy";
+import DeployResult from "../pages/DeploymentResult";
 
 export default function AppRoutes() {
   return (
@@ -41,11 +41,10 @@ export default function AppRoutes() {
         element={<Payload />}
       />
 
-      {/* Deploy */}
       <Route
-        path="/deploy"
-        element={<Deploy />}
-      />
+  path="/deploy"
+  element={<DeployResult />}
+/>
 
     </Routes>
   );

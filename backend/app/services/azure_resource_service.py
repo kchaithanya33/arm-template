@@ -235,59 +235,63 @@ def validate_storage_resource_group(
 # Validate Storage Account Access
 # ======================================================
 
+# ======================================================
+# Validate Storage Account Access
+# ======================================================
+
 def validate_storage_account_access(
         subscription_id,
-        resource_id
+        storage_account_name
 ):
 
-
     credential = DefaultAzureCredential()
-
 
     storage_client = StorageManagementClient(
         credential,
         subscription_id
     )
 
-
     try:
 
-        # Extract resource group and storage name
-        # from resource ID
+        # Search every storage account in the subscription
+        for account in storage_client.storage_accounts.list():
 
-        parts = resource_id.split("/")
+            if account.name == storage_account_name:
 
-        resource_group_name = parts[4]
+                parts = account.id.split("/")
 
-        storage_account_name = parts[-1]
+                resource_group_name = parts[4]
 
+                account_details = storage_client.storage_accounts.get_properties(
+                    resource_group_name,
+                    storage_account_name
+                )
 
+                return {
 
-        account = storage_client.storage_accounts.get_properties(
+                    "allowed": True,
 
-            resource_group_name,
+                    "name": account_details.name,
 
-            storage_account_name
+                    "location": account_details.location,
 
-        )
+                    "id": account_details.id,
 
+                    "resourceGroup": resource_group_name
+
+                }
 
         return {
 
-            "allowed": True,
+            "allowed": False,
 
-            "name": account.name,
+            "error": "NOT_FOUND",
 
-            "location": account.location,
-
-            "id": account.id
+            "message": f"Storage account '{storage_account_name}' not found."
 
         }
 
-
-
     except HttpResponseError as e:
-
 
         if e.status_code == 403:
 
@@ -300,19 +304,5 @@ def validate_storage_account_access(
                 "message": str(e)
 
             }
-
-
-        elif e.status_code == 404:
-
-            return {
-
-                "allowed": False,
-
-                "error": "NOT_FOUND",
-
-                "message": str(e)
-
-            }
-
 
         raise e

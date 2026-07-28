@@ -6,13 +6,13 @@
             "value": "new"
         },
         "storageAccountName": {
-            "value": "armchaistorage1"
+            "value": "armstoragechai21"
         },
         "storageLocation": {
-            "value": "Central India"
+            "value": "centralindia"
         },
         "storageResourceGroupName": {
-            "value": "rg-arm-chai2"
+            "value": "armrgchai21"
         },
         "storageKind": {
             "value": "StorageV2"
@@ -21,7 +21,7 @@
             "value": "Standard_LRS"
         },
         "accessTier": {
-            "value": "Hot"
+            "value": "Cool"
         },
         "publicNetworkAccess": {
             "value": "Enabled"
@@ -42,22 +42,22 @@
             "value": "Disabled"
         },
         "logicAppName": {
-            "value": "logic-arm-chai"
+            "value": "armlogicchai21"
         },
         "logicAppLocation": {
-            "value": "Central India"
+            "value": "centralindia"
         },
         "logicAppMode": {
             "value": "new"
         },
         "logicAppResourceGroupName": {
-            "value": "rg-arm-chai3"
+            "value": "armrgchai21"
         },
         "functionAppName": {
-            "value": "func-chaitanya-demo-arm"
+            "value": "armfunctionchai21"
         },
         "functionAppLocation": {
-            "value": "Central India"
+            "value": "centralindia"
         },
         "functionRuntimeStack": {
             "value": "python"
@@ -66,16 +66,16 @@
             "value": "3.12"
         },
         "functionResourceGroupName": {
-            "value": "rg-arm-chai4"
+            "value": "armrgchai21"
         },
         "functionStorageMode": {
             "value": "new"
         },
         "functionStorageAccountName": {
-            "value": "stfunchai2"
+            "value": "armstoragechai22"
         },
         "functionStorageLocation": {
-            "value": "Central India"
+            "value": "centralindia"
         },
         "functionStorageKind": {
             "value": "StorageV2"

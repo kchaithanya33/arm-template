@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-
+import traceback
 from app.models.deployment_model import (
     DeploymentRequest
 )
@@ -73,11 +73,8 @@ def create_deployment(
 
 
     except Exception as e:
-
+        traceback.print_exc()
         raise HTTPException(
-
-            status_code=500,
-
-            detail=str(e)
-
-        )
+        status_code=500,
+        detail=str(e)
+    )

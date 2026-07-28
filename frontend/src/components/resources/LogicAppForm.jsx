@@ -37,9 +37,12 @@ export default function LogicAppForm() {
   ==========================================
   */
 
-  const [resourceGroupMode, setResourceGroupMode] = useState(
-  deploymentData.logicApp?.resourceGroup?.mode || "existing"
-);
+  const [resourceGroupMode, setResourceGroupMode] = useState(() => {
+  if (deploymentData.logicApp?.resourceGroup?.mode === "new") {
+    return "create";
+  }
+  return deploymentData.logicApp?.resourceGroup?.mode || "existing";
+});
 
 
   /*
@@ -71,9 +74,9 @@ export default function LogicAppForm() {
       : "",
 
   name:
-    deploymentData.logicApp?.resourceGroup?.mode === "create"
-      ? deploymentData.logicApp?.resourceGroup?.name || ""
-      : "",
+  deploymentData.logicApp?.resourceGroup?.mode !== "existing"
+  ? deploymentData.logicApp?.resourceGroup?.name || ""
+  : "",
 
   location:
     deploymentData.logicApp?.resourceGroup?.location || "",
@@ -167,41 +170,7 @@ export default function LogicAppForm() {
 ==========================================
 */
 
-useEffect(() => {
 
-  updateSection(
-    "logicApp",
-    {
-
-      mode: logicApp.mode,
-
-      name: logicApp.name,
-
-      location: logicApp.location,
-
-      resourceGroup: {
-
-        mode: resourceGroupMode,
-
-        ...(resourceGroupMode === "existing"
-          ? {
-              name: resourceGroup.existing,
-            }
-          : {
-              name: resourceGroup.name,
-              location: resourceGroup.location,
-            }),
-
-      },
-
-    }
-  );
-
-}, [
-  logicApp,
-  resourceGroup,
-  resourceGroupMode,
-]);
 
 
   /*
@@ -211,82 +180,46 @@ useEffect(() => {
   */
 
 
-  function handleNext(){
+  function handleNext() {
 
+  const finalData = {
 
-    const finalData = {
+    mode: "new",
 
+    name: logicApp.name,
 
-      mode: logicApp.mode,
+    location: logicApp.location,
 
+    resourceGroup: {
 
-      name: logicApp.name,
+      mode:
+        resourceGroupMode === "create"
+          ? "new"
+          : "existing",
 
-
-      location: logicApp.location,
-
-
-
-      resourceGroup:{
-
-
-        mode: resourceGroupMode,
-
-
-
-        ...(resourceGroupMode === "existing"
-
-          ?
-
-          {
-
-            name:resourceGroup.existing
-
+      ...(resourceGroupMode === "existing"
+        ? {
+            name: resourceGroup.existing,
           }
+        : {
+            name: resourceGroup.name,
+            location: resourceGroup.location,
+          }),
+    },
+  };
 
+  updateSection(
+    "logicApp",
+    finalData
+  );
 
-          :
+  console.log(
+    "Logic App Saved",
+    finalData
+  );
 
-          {
-
-            name:resourceGroup.name,
-
-            location:resourceGroup.location
-
-          }
-
-        )
-
-      }
-
-
-    };
-
-
-
-    updateSection(
-
-      "logicApp",
-
-      finalData
-
-    );
-
-
-
-    console.log(
-
-      "Logic App Saved",
-
-      finalData
-
-    );
-
-
-
-    navigate("/function-app");
-
-  }
+  navigate("/function-app");
+}
 
 
 
@@ -301,12 +234,7 @@ return (
 
 
 
-<div
-className="back"
-onClick={()=>navigate("/storage")}
->
-←
-</div>
+
 
 
 

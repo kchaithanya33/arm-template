@@ -176,9 +176,9 @@ def process_storage_account(deployment_request):
 
     elif storage.mode == "existing":
         access = validate_storage_account_access(
-            subscription_id,
-            storage.resourceId
-        )
+    subscription_id,
+    storage.name
+)
         if not access["allowed"]:
             raise HTTPException(
                 status_code=403,
@@ -277,14 +277,14 @@ def process_function_app(deployment_request):
     storage = function.storageAccount
 
     if storage.mode == "existing":
-        if not storage.resourceId:
+        if not storage.name:
             raise HTTPException(
-                status_code=400,
-                detail="Storage Account resourceId is required for existing Storage Account"
-            )
+            status_code=400,
+            detail="Storage Account name is required for existing Storage Account"
+        )
         access = validate_storage_account_access(
             subscription_id,
-            storage.resourceId
+            storage.name
         )
         if not access["allowed"]:
             raise HTTPException(

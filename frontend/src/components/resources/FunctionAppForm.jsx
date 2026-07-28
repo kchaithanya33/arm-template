@@ -24,9 +24,13 @@ export default function FunctionAppForm() {
   const [storageMode, setStorageMode] = useState(
   deploymentData.functionApp?.storage?.mode || "existing"
 );
-  const [resourceGroupMode, setResourceGroupMode] = useState(
-  deploymentData.functionApp?.resourceGroup?.mode || "existing"
-);
+  const [resourceGroupMode, setResourceGroupMode] = useState(() => {
+  if (deploymentData.functionApp?.resourceGroup?.mode === "new") {
+    return "create";
+  }
+
+  return deploymentData.functionApp?.resourceGroup?.mode || "existing";
+});
 
   /* ==========================================
       Function App
@@ -135,12 +139,19 @@ export default function FunctionAppForm() {
     updateSection("functionApp", {
       ...functionApp,
       storage: {
-        mode: storageMode,
+        mode: storageMode === "create" ? "new" : "existing",
         ...storage,
       },
-      resourceGroup: {
-        mode: resourceGroupMode,
-        ...resourceGroup,
+      resourceGroup:
+  resourceGroupMode === "existing"
+    ? {
+        mode: "existing",
+        name: resourceGroup.existing,
+      }
+    : {
+        mode: "new",
+        name: resourceGroup.name,
+        location: resourceGroup.location,
       },
     });
     console.log("Function App Saved");
@@ -150,9 +161,7 @@ export default function FunctionAppForm() {
   return (
     <div className="phone">
       <div className="content">
-        <div className="back" onClick={() => navigate("/logic-app")}>
-          ←
-        </div>
+        
 
         <h2 className="logo">
           ARM<span>Flow</span>

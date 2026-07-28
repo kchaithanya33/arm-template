@@ -239,20 +239,11 @@ def validate_storage_account(request):
     # ==================================================
 
     elif storage.mode == "existing":
-
-
-
-        if not storage.resourceId:
-
-
+        if not storage.name:
             raise HTTPException(
-
-                status_code=400,
-
-                detail="Storage Account resourceId is required for existing Storage Account"
-
-            )
-
+            status_code=400,
+            detail="Storage Account name is required for existing Storage Account"
+        )
 
 
     return True
@@ -441,13 +432,11 @@ def validate_function_app(request):
     # Existing Storage Account
 
     if storage.mode == "existing":
-
-        if not storage.resourceId:
-
+        if not storage.name:
             raise HTTPException(
-                status_code=400,
-                detail="Storage Account resourceId is required for existing Storage Account"
-            )
+            status_code=400,
+            detail="Storage Account name is required for existing Storage Account"
+        )
 
 
     # New Storage Account

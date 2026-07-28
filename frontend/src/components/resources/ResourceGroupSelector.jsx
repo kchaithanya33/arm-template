@@ -102,19 +102,20 @@ export default function ResourceGroupSelector() {
   // ----------------------------
 
   function handleNext() {
-    navigate("/storage");
-  }
+
+  saveResourceGroup({
+    mode,
+    name: resourceGroupName,
+    location,
+  });
+
+  navigate("/storage");
+}
 
   return (
     <div className="phone">
       <div className="content">
-        <div
-          className="back"
-          onClick={() => navigate(-1)}
-          style={{ cursor: "pointer" }}
-        >
-          ← Back
-        </div>
+        
 
         <h2 className="logo">
           ARM<span>Flow</span>

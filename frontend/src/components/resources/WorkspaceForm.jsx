@@ -31,7 +31,7 @@ export default function WorkspaceForm() {
     location: "",
     sku: "PerGB2018",
     resourceGroup: {
-      mode: "create",
+      mode: "new",
       name: "",
       location: "",
     },
@@ -137,7 +137,7 @@ export default function WorkspaceForm() {
       };
     } else {
       finalWorkspace = {
-        mode: "create",
+        mode: "new",
         name: workspace.name,
         location: workspace.location,
         sku: workspace.sku,

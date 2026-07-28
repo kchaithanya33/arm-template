@@ -1,21 +1,10 @@
-const BASE_URL = "http://localhost:5000/api"; // change if needed
+import axios from "axios";
 
-export const createResourceGroupApi = async (data) => {
-  try {
-    const response = await fetch(`${BASE_URL}/resource-group`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+const API = axios.create({
+  baseURL: "http://localhost:8000",
+});
 
-    if (!response.ok) {
-      throw new Error("Failed to create resource group");
-    }
-
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-};
+export async function deployTemplate(data) {
+  const response = await API.post("/deployment/", data);
+  return response.data;
+}
