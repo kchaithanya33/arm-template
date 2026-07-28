@@ -1,33 +1,27 @@
 import { Routes, Route } from "react-router-dom";
 
-import Deploy from "../pages/Deploy";
+import ResourceGroup from "../components/resources/ResourceGroupSelector";
 import Storage from "../pages/Storage";
 import LogicApp from "../pages/LogicApp";
-import Workspace from "../pages/Workspace";
-
+import FunctionApp from "../pages/FunctionApp";
+import Payload from "../pages/Payload";
+import Deploy from "../pages/Deploy";
 
 export default function AppRoutes() {
-
   return (
-
     <Routes>
 
-
-      {/* Resource Group */}
+      {/* Start Page */}
       <Route
         path="/"
-        element={<Deploy />}
+        element={<ResourceGroup />}
       />
 
-
-
-      {/* Storage Account */}
+      {/* Storage */}
       <Route
         path="/storage"
         element={<Storage />}
       />
-
-
 
       {/* Logic App */}
       <Route
@@ -35,17 +29,24 @@ export default function AppRoutes() {
         element={<LogicApp />}
       />
 
-
-
-      {/* Workspace */}
+      {/* Function App */}
       <Route
-        path="/workspace"
-        element={<Workspace />}
+        path="/function-app"
+        element={<FunctionApp />}
       />
 
+      {/* Payload */}
+      <Route
+        path="/payload"
+        element={<Payload />}
+      />
+
+      {/* Deploy */}
+      <Route
+        path="/deploy"
+        element={<Deploy />}
+      />
 
     </Routes>
-
   );
-
 }

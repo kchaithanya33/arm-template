@@ -14,7 +14,7 @@ export default function StorageForm() {
 
   const navigate = useNavigate();
 
-  const { updateSection } = useDeployment();
+  const { deploymentData, updateSection } = useDeployment();
 
 
 
@@ -22,13 +22,12 @@ export default function StorageForm() {
   // Modes
   // ==============================
 
-  const [storageMode,setStorageMode] =
-    useState("create");
-
-
-  const [resourceGroupMode,setResourceGroupMode] =
-    useState("existing");
-
+  const [storageMode, setStorageMode] = useState(
+  deploymentData.storage?.mode || "create"
+);
+  const [resourceGroupMode, setResourceGroupMode] = useState(
+  deploymentData.resourceGroup?.mode || "existing"
+);
 
 
 
@@ -54,23 +53,20 @@ export default function StorageForm() {
   // Storage
   // ==============================
 
-  const [storage,setStorage] = useState({
-
-    existingStorage:"",
-
-    name:"",
-
-    location:"",
-
-    kind:"StorageV2",
-
-    sku:"Standard_LRS",
-
-    accessTier:"Hot",
-
-    minimumTlsVersion:"TLS1_2",
-
-  });
+  const [storage, setStorage] = useState(
+  deploymentData.storage?.name ||
+  deploymentData.storage?.existingStorage
+    ? deploymentData.storage
+    : {
+        existingStorage: "",
+        name: "",
+        location: "",
+        kind: "StorageV2",
+        sku: "Standard_LRS",
+        accessTier: "Hot",
+        minimumTlsVersion: "TLS1_2",
+      }
+);
 
 
 
@@ -79,16 +75,16 @@ export default function StorageForm() {
   // Resource Group
   // ==============================
 
-  const [resourceGroup,setResourceGroup] =
-    useState({
-
-      existing:"",
-
-      name:"",
-
-      location:""
-
-    });
+  const [resourceGroup, setResourceGroup] = useState(
+  deploymentData.resourceGroup?.name ||
+  deploymentData.resourceGroup?.existing
+    ? deploymentData.resourceGroup
+    : {
+        existing: "",
+        name: "",
+        location: "",
+      }
+);
 
 
 
@@ -103,6 +99,29 @@ export default function StorageForm() {
     loadAzureData();
 
   },[]);
+
+  // =====================================
+// Preserve values while navigating
+// =====================================
+
+useEffect(() => {
+
+  updateSection("storage", {
+    mode: storageMode,
+    ...storage
+  });
+
+}, [storage, storageMode]);
+
+
+useEffect(() => {
+
+  updateSection("resourceGroup", {
+    mode: resourceGroupMode,
+    ...resourceGroup
+  });
+
+}, [resourceGroup, resourceGroupMode]);
 
 
 
@@ -953,17 +972,23 @@ value={loc.name}
 
 
 
-<button
+<div className="button-row">
 
-className="next"
+  <button
+    className="next back-button"
+    onClick={() => navigate("/")}
+  >
+    Back
+  </button>
 
-onClick={handleNext}
+  <button
+    className="next"
+    onClick={handleNext}
+  >
+    Next
+  </button>
 
->
-
-Next
-
-</button>
+</div>
 
 
 

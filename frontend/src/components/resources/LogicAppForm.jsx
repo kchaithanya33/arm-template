@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +15,7 @@ export default function LogicAppForm() {
 
   const navigate = useNavigate();
 
-  const { updateSection } = useDeployment();
+  const { deploymentData, updateSection } = useDeployment();
 
 
 
@@ -36,9 +37,9 @@ export default function LogicAppForm() {
   ==========================================
   */
 
-  const [resourceGroupMode, setResourceGroupMode] =
-    useState("existing");
-
+  const [resourceGroupMode, setResourceGroupMode] = useState(
+  deploymentData.logicApp?.resourceGroup?.mode || "existing"
+);
 
 
   /*
@@ -47,15 +48,13 @@ export default function LogicAppForm() {
   ==========================================
   */
 
-  const [logicApp, setLogicApp] = useState({
-
+  const [logicApp, setLogicApp] = useState(
+  deploymentData.logicApp || {
     mode: "new",
-
     name: "",
-
-    location: ""
-
-  });
+    location: "",
+  }
+);
 
 
 
@@ -66,14 +65,19 @@ export default function LogicAppForm() {
   */
 
   const [resourceGroup, setResourceGroup] = useState({
+  existing:
+    deploymentData.logicApp?.resourceGroup?.mode === "existing"
+      ? deploymentData.logicApp?.resourceGroup?.name || ""
+      : "",
 
-    existing: "",
+  name:
+    deploymentData.logicApp?.resourceGroup?.mode === "create"
+      ? deploymentData.logicApp?.resourceGroup?.name || ""
+      : "",
 
-    name: "",
-
-    location: ""
-
-  });
+  location:
+    deploymentData.logicApp?.resourceGroup?.location || "",
+});
 
 
 
@@ -157,8 +161,47 @@ export default function LogicAppForm() {
 
   }
 
+  /*
+==========================================
+    Preserve Data Until Deploy
+==========================================
+*/
 
+useEffect(() => {
 
+  updateSection(
+    "logicApp",
+    {
+
+      mode: logicApp.mode,
+
+      name: logicApp.name,
+
+      location: logicApp.location,
+
+      resourceGroup: {
+
+        mode: resourceGroupMode,
+
+        ...(resourceGroupMode === "existing"
+          ? {
+              name: resourceGroup.existing,
+            }
+          : {
+              name: resourceGroup.name,
+              location: resourceGroup.location,
+            }),
+
+      },
+
+    }
+  );
+
+}, [
+  logicApp,
+  resourceGroup,
+  resourceGroupMode,
+]);
 
 
   /*
@@ -241,7 +284,7 @@ export default function LogicAppForm() {
 
 
 
-    navigate("/");
+    navigate("/function-app");
 
   }
 

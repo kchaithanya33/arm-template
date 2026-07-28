@@ -1,317 +1,212 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDeployment } from "../../context/DeploymentContext";
 
 import {
   getResourceGroupsApi,
   getLocationsApi,
 } from "../../api/resourceApi";
 
-
 export default function ResourceGroupSelector() {
-
-  const [mode, setMode] = useState("create");
-
   const navigate = useNavigate();
 
+  const { deploymentData, updateSection } = useDeployment();
 
   // ----------------------------
   // Azure Data
   // ----------------------------
 
   const [resourceGroups, setResourceGroups] = useState([]);
-
   const [locations, setLocations] = useState([]);
-
 
   // ----------------------------
   // Selected Values
   // ----------------------------
 
-  const [resourceGroupName, setResourceGroupName] =
-    useState("");
+  const [mode, setMode] = useState(
+    deploymentData.resourceGroup?.mode || "create"
+  );
 
-  const [location, setLocation] =
-    useState("");
+  const [resourceGroupName, setResourceGroupName] = useState(
+    deploymentData.resourceGroup?.name || ""
+  );
 
+  const [location, setLocation] = useState(
+    deploymentData.resourceGroup?.location || ""
+  );
 
   // ----------------------------
   // Load Azure Data
   // ----------------------------
 
   useEffect(() => {
-
     loadAzureData();
-
   }, []);
 
-
-
   async function loadAzureData() {
-
     try {
+      const groups = await getResourceGroupsApi();
+      const locationsList = await getLocationsApi();
 
-      // temporary subscription id
-      // later we will take this from login context
-
-      const subscriptionId =
-        "cc65e704-15de-4ddc-aa64-56973ac617f8";
-
-
-      const groups =
-        await getResourceGroupsApi(subscriptionId);
-
-
-      const locationsList =
-        await getLocationsApi(subscriptionId);
-
-
-
-      setResourceGroups(groups);
-
-      setLocations(locationsList);
-
-
-    } catch(error) {
-
-      console.error(
-        "Azure loading error:",
-        error
-      );
-
+      setResourceGroups(groups || []);
+      setLocations(locationsList || []);
+    } catch (error) {
+      console.error("Azure loading error:", error);
     }
-
   }
 
+  // ----------------------------
+  // Save helper
+  // ----------------------------
 
+  function saveResourceGroup(data) {
+    updateSection("resourceGroup", data);
+  }
+
+  // ----------------------------
+  // Handlers
+  // ----------------------------
+
+  function handleModeChange(value) {
+    setMode(value);
+
+    saveResourceGroup({
+      mode: value,
+      name: resourceGroupName,
+      location,
+    });
+  }
+
+  function handleNameChange(value) {
+    setResourceGroupName(value);
+
+    saveResourceGroup({
+      mode,
+      name: value,
+      location,
+    });
+  }
+
+  function handleLocationChange(value) {
+    setLocation(value);
+
+    saveResourceGroup({
+      mode,
+      name: resourceGroupName,
+      location: value,
+    });
+  }
+
+  // ----------------------------
+  // Next
+  // ----------------------------
+
+  function handleNext() {
+    navigate("/storage");
+  }
 
   return (
-
     <div className="phone">
-
-
-      <div className="back">
-        ←
-      </div>
-
-
-
       <div className="content">
-
+        <div
+          className="back"
+          onClick={() => navigate(-1)}
+          style={{ cursor: "pointer" }}
+        >
+          ← Back
+        </div>
 
         <h2 className="logo">
           ARM<span>Flow</span>
         </h2>
 
-
-        <h1>
-          Create Your Own Template
-        </h1>
-
+        <h1>Create Your Own Template</h1>
 
         <p className="subtitle">
           Define your own parameters
         </p>
 
-
-
         {/* Toggle */}
 
         <div className="toggle">
-
-
           <button
-            className={
-              mode === "create"
-              ? "active"
-              : ""
-            }
-
-            onClick={() =>
-              setMode("create")
-            }
+            className={mode === "create" ? "active" : ""}
+            onClick={() => handleModeChange("create")}
           >
             Create New
           </button>
 
-
-
           <button
-            className={
-              mode === "existing"
-              ? "active"
-              : ""
-            }
-
-            onClick={() =>
-              setMode("existing")
-            }
+            className={mode === "existing" ? "active" : ""}
+            onClick={() => handleModeChange("existing")}
           >
             Use Existing
           </button>
-
-
         </div>
-
-
-
-
 
         {/* Form */}
 
         <div className="form">
+          <label>Resource Group Name</label>
 
+          {mode === "create" ? (
+            <input
+              placeholder="rg-armflow-prod"
+              value={resourceGroupName}
+              onChange={(e) => handleNameChange(e.target.value)}
+            />
+          ) : (
+            <select
+              value={resourceGroupName}
+              onChange={(e) => handleNameChange(e.target.value)}
+            >
+              <option value="">
+                Select existing group...
+              </option>
 
-          <label>
-            Resource Group Name
-          </label>
-
-
-
-          {
-            mode === "create" ?
-
-
-            (
-              <input
-
-                placeholder="rg-armflow-prod"
-
-                value={resourceGroupName}
-
-                onChange={(e)=>
-                  setResourceGroupName(
-                    e.target.value
-                  )
-                }
-
-              />
-
-            )
-
-
-            :
-
-
-            (
-
-              <select
-
-                value={resourceGroupName}
-
-                onChange={(e)=>
-                  setResourceGroupName(
-                    e.target.value
-                  )
-                }
-
-              >
-
-                <option value="">
-                  Select existing group...
+              {resourceGroups.map((rg) => (
+                <option
+                  key={rg.name}
+                  value={rg.name}
+                >
+                  {rg.name}
                 </option>
+              ))}
+            </select>
+          )}
 
-
-                {
-                  resourceGroups.map((rg)=>(
-
-                    <option
-                      key={rg.name}
-                      value={rg.name}
-                    >
-                      {rg.name}
-                    </option>
-
-                  ))
-                }
-
-
-              </select>
-
-            )
-
-          }
-
-
-
-
-
-          {
-            mode === "create" &&
-
+          {mode === "create" && (
             <>
-
-              <label>
-                Location
-              </label>
-
-
+              <label>Location</label>
 
               <select
-
                 value={location}
-
-                onChange={(e)=>
-                  setLocation(
-                    e.target.value
-                  )
-                }
-
+                onChange={(e) => handleLocationChange(e.target.value)}
               >
-
                 <option value="">
                   Select Location
                 </option>
 
-
-
-                {
-                  locations.map((loc)=>(
-
-                    <option
-                      key={loc.name}
-                      value={loc.name}
-                    >
-                      {loc.display_name}
-                    </option>
-
-                  ))
-                }
-
-
+                {locations.map((loc) => (
+                  <option
+                    key={loc.name}
+                    value={loc.name}
+                  >
+                    {loc.display_name}
+                  </option>
+                ))}
               </select>
-
-
             </>
-
-          }
-
-
+          )}
         </div>
-
-
       </div>
 
-
-
-
-
       <button
-
         className="next"
-
-        onClick={() =>
-          navigate("/storage")
-        }
-
+        onClick={handleNext}
       >
-
         Next
-
       </button>
-
-
     </div>
-
   );
-
 }

@@ -6,13 +6,13 @@
             "value": "new"
         },
         "storageAccountName": {
-            "value": "mainstorageaccount001"
+            "value": "armchaistorage1"
         },
         "storageLocation": {
-            "value": "eastus"
+            "value": "Central India"
         },
         "storageResourceGroupName": {
-            "value": "func-demo-rg"
+            "value": "rg-arm-chai2"
         },
         "storageKind": {
             "value": "StorageV2"
@@ -42,40 +42,40 @@
             "value": "Disabled"
         },
         "logicAppName": {
-            "value": "demo-logic-app-001"
+            "value": "logic-arm-chai"
         },
         "logicAppLocation": {
-            "value": "eastus"
+            "value": "Central India"
         },
         "logicAppMode": {
             "value": "new"
         },
         "logicAppResourceGroupName": {
-            "value": "func-demo-rg"
+            "value": "rg-arm-chai3"
         },
         "functionAppName": {
-            "value": "demoarmchai"
+            "value": "func-chaitanya-demo-arm"
         },
         "functionAppLocation": {
-            "value": "eastus"
+            "value": "Central India"
         },
         "functionRuntimeStack": {
             "value": "python"
         },
         "functionRuntimeVersion": {
-            "value": "3.11"
+            "value": "3.12"
         },
         "functionResourceGroupName": {
-            "value": "func-demo-rg"
+            "value": "rg-arm-chai4"
         },
         "functionStorageMode": {
             "value": "new"
         },
         "functionStorageAccountName": {
-            "value": "mainstorageaccount001"
+            "value": "stfunchai2"
         },
         "functionStorageLocation": {
-            "value": "eastus"
+            "value": "Central India"
         },
         "functionStorageKind": {
             "value": "StorageV2"

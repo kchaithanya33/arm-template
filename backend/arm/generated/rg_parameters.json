@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceGroupName": {
-            "value": "func-demo-rg"
+            "value": "rg-arm-chai4"
         },
         "resourceGroupLocation": {
-            "value": "eastus"
+            "value": "Central India"
         }
     }
 }
